@@ -131,6 +131,12 @@ class Tree
     ordered_arr
   end
 
+  def height(root = @root)
+    return -1 if root.nil?
+
+    [height(root.left), height(root.right)].max + 1
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -138,11 +144,9 @@ class Tree
   end
 end
 
-# bst = Tree.new(Array.new(15) { rand(1..100) })
-bst = Tree.new([20, 30, 40, 50, 60, 70, 80])
+bst = Tree.new(Array.new(15) { rand(1..100) })
+# bst = Tree.new([20, 30, 40, 50, 60, 70, 80])
 
 bst.pretty_print
 
-p bst.inorder
-p bst.preorder
-p bst.postorder
+p bst.height
