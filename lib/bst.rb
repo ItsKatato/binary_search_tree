@@ -95,6 +95,42 @@ class Tree
     ordered_arr
   end
 
+  def inorder(root = @root, ordered_arr = [], &block)
+    return if root.nil?
+
+    inorder(root.left, ordered_arr, &block)
+    ordered_arr.push(root.data)
+    if block_given?
+      yield(root)
+    end
+    inorder(root.right, ordered_arr, &block)
+    ordered_arr
+  end
+
+  def preorder(root = @root, ordered_arr = [], &block)
+    return if root.nil?
+
+    ordered_arr.push(root.data)
+    if block_given?
+      yield(root)
+    end
+    inorder(root.left, ordered_arr, &block)
+    inorder(root.right, ordered_arr, &block)
+    ordered_arr
+  end
+
+  def postorder(root = @root, ordered_arr = [], &block)
+    return if root.nil?
+
+    inorder(root.left, ordered_arr, &block)
+    inorder(root.right, ordered_arr, &block)
+    ordered_arr.push(root.data)
+    if block_given?
+      yield(root)
+    end
+    ordered_arr
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -107,4 +143,6 @@ bst = Tree.new([20, 30, 40, 50, 60, 70, 80])
 
 bst.pretty_print
 
-p bst.level_order
+p bst.inorder
+p bst.preorder
+p bst.postorder
