@@ -114,16 +114,16 @@ class Tree
     if block_given?
       yield(root)
     end
-    inorder(root.left, ordered_arr, &block)
-    inorder(root.right, ordered_arr, &block)
+    preorder(root.left, ordered_arr, &block)
+    preorder(root.right, ordered_arr, &block)
     ordered_arr
   end
 
   def postorder(root = @root, ordered_arr = [], &block)
     return if root.nil?
 
-    inorder(root.left, ordered_arr, &block)
-    inorder(root.right, ordered_arr, &block)
+    postorder(root.left, ordered_arr, &block)
+    postorder(root.right, ordered_arr, &block)
     ordered_arr.push(root.data)
     if block_given?
       yield(root)
@@ -148,6 +148,21 @@ class Tree
     end
   end
 
+  def balanced?(root = @root)
+    return true if root.nil?
+
+    l_height = height(root.left)
+    r_height = height(root.right)
+
+    return true if (l_height - r_height).abs <= 1 && balanced?(root.left) && balanced?(root.right)
+
+    false
+  end
+
+  def rebalance(root = @root)
+    @root = build_tree(inorder)
+  end
+
 
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
@@ -155,10 +170,3 @@ class Tree
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 end
-
-# bst = Tree.new(Array.new(15) { rand(1..100) })
-bst = Tree.new([2, 5, 28, 40, 44, 47, 54, 60, 62, 63, 69, 81, 82, 95, 100])
-
-bst.pretty_print
-
-p bst.depth(bst.find(100))
