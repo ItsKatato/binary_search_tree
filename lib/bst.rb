@@ -137,6 +137,18 @@ class Tree
     [height(root.left), height(root.right)].max + 1
   end
 
+  def depth(node, root = @root, curr_depth = 0)
+    return curr_depth if node == root
+    if node.data < root.data
+      curr_depth += 1
+      depth(node, root.left, curr_depth)
+    else
+      curr_depth += 1
+      depth(node, root.right, curr_depth)
+    end
+  end
+
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -144,9 +156,9 @@ class Tree
   end
 end
 
-bst = Tree.new(Array.new(15) { rand(1..100) })
-# bst = Tree.new([20, 30, 40, 50, 60, 70, 80])
+# bst = Tree.new(Array.new(15) { rand(1..100) })
+bst = Tree.new([2, 5, 28, 40, 44, 47, 54, 60, 62, 63, 69, 81, 82, 95, 100])
 
 bst.pretty_print
 
-p bst.height
+p bst.depth(bst.find(100))
