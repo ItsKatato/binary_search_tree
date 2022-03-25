@@ -80,6 +80,21 @@ class Tree
     end
   end
 
+  def level_order(root = @root, arr = [], ordered_arr = [])
+    return if root.nil?
+    arr.push(root)
+    while !arr.empty?
+      current = arr.first
+      if block_given?
+        yield(current)
+      end
+      arr.push(current.left) if !current.left.nil?
+      arr.push(current.right) if !current.right.nil?
+      ordered_arr.push(arr.shift.data)
+    end
+    ordered_arr
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
@@ -92,4 +107,4 @@ bst = Tree.new([20, 30, 40, 50, 60, 70, 80])
 
 bst.pretty_print
 
-p bst.find(40)
+p bst.level_order
