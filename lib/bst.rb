@@ -73,6 +73,7 @@ class Tree
 
   def find(value, root = @root)
     return root if root.data == value
+
     if value < root.data
       find(value, root.left)
     else
@@ -82,14 +83,14 @@ class Tree
 
   def level_order(root = @root, arr = [], ordered_arr = [])
     return if root.nil?
+
     arr.push(root)
-    while !arr.empty?
+    until arr.empty?
       current = arr.first
-      if block_given?
-        yield(current)
-      end
-      arr.push(current.left) if !current.left.nil?
-      arr.push(current.right) if !current.right.nil?
+      yield(root) if block_given?
+
+      arr.push(current.left) unless current.left.nil?
+      arr.push(current.right) unless current.right.nil?
       ordered_arr.push(arr.shift.data)
     end
     ordered_arr
@@ -100,9 +101,8 @@ class Tree
 
     inorder(root.left, ordered_arr, &block)
     ordered_arr.push(root.data)
-    if block_given?
-      yield(root)
-    end
+    yield(root) if block_given?
+
     inorder(root.right, ordered_arr, &block)
     ordered_arr
   end
@@ -111,9 +111,8 @@ class Tree
     return if root.nil?
 
     ordered_arr.push(root.data)
-    if block_given?
-      yield(root)
-    end
+    yield(root) if block_given?
+
     preorder(root.left, ordered_arr, &block)
     preorder(root.right, ordered_arr, &block)
     ordered_arr
@@ -125,9 +124,8 @@ class Tree
     postorder(root.left, ordered_arr, &block)
     postorder(root.right, ordered_arr, &block)
     ordered_arr.push(root.data)
-    if block_given?
-      yield(root)
-    end
+    yield(root) if block_given?
+
     ordered_arr
   end
 
@@ -139,11 +137,11 @@ class Tree
 
   def depth(node, root = @root, curr_depth = 0)
     return curr_depth if node == root
+
+    curr_depth += 1
     if node.data < root.data
-      curr_depth += 1
       depth(node, root.left, curr_depth)
     else
-      curr_depth += 1
       depth(node, root.right, curr_depth)
     end
   end
@@ -159,10 +157,9 @@ class Tree
     false
   end
 
-  def rebalance(root = @root)
+  def rebalance
     @root = build_tree(inorder)
   end
-
 
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
