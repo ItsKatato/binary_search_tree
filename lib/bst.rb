@@ -158,7 +158,8 @@ class Tree
   end
 
   def rebalance
-    @root = build_tree(inorder)
+    @array = inorder
+    @root = build_tree(@array)
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
