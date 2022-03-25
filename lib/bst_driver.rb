@@ -24,6 +24,7 @@ bst.rebalance
 bst.pretty_print
 p bst.balanced?
 
+p bst.level_order
 p bst.inorder
 p bst.preorder
 p bst.postorder
