@@ -26,7 +26,7 @@ class Tree
       nil
     else
       middle = arr.length / 2
-      middle_val = arr[(arr.length / 2)]
+      middle_val = arr[middle]
       root = Node.new(middle_val)
       root.left = build_tree(arr.slice(0...middle))
       root.right = build_tree(arr.slice((middle + 1)..(arr.index(arr.last))))
